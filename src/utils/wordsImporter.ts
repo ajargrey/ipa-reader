@@ -18,7 +18,7 @@ async function loadWords(): Promise<Record<string, string> | null> {
   try {
     // Create a script element to load words.js
     const script = document.createElement('script');
-    script.src = '/src/words.js';
+    script.src = '/words.js'; // Now loading from public directory
     
     return new Promise((resolve, reject) => {
       script.onload = () => {
@@ -27,7 +27,10 @@ async function loadWords(): Promise<Record<string, string> | null> {
         console.log('Words dictionary loaded:', wordsDict ? 'Success' : 'Failed');
         resolve(wordsDict);
       };
-      script.onerror = reject;
+      script.onerror = (error) => {
+        console.error('Failed to load words.js script:', error);
+        reject(error);
+      };
       document.head.appendChild(script);
     });
   } catch (error) {
